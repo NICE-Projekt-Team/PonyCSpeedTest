@@ -1,10 +1,5 @@
 class WriteArray
-var env: Env
-
-new create(env: Env) =>
-env = env
-
-env.out.print("Starting to write Array")
+new create(env: Env) => env.out.print("Starting to write Array")
 
 
 
@@ -12,16 +7,14 @@ env.out.print("Starting to write Array")
 class TransferArray
 
 
+actor Transfer
+
 actor Main
-var _env: Env
 
-new create(env: Env) =>
-_env = env
+new create(env: Env) => env.out.print("Size of the array is set to: ")
 
-_env.out.print("Size of the array is set to: ")
+env.out.print("Done writing arrays. Duration: ")
 
-_env.out.print("Done writing arrays. Duration: ")
-
-_env.out.print("Done transferring arrays. Duration: ")
+env.out.print("Done transferring arrays. Duration: ")
 
 
