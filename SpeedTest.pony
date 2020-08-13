@@ -8,6 +8,7 @@ actor TransferActor
     var rand: Rand
     var dice: Dice
     var duration: F64
+    var timers: Timers
 
     new create(size': U32, env': Env) =>
         env = env'
@@ -15,7 +16,7 @@ actor TransferActor
         list = List[U64]()
         rand = Rand
         dice = Dice(rand)
-        duration= 1.2
+        duration = 0.0
 
 
     be writeList() =>
@@ -33,11 +34,12 @@ actor TransferActor
         env.out.print("Transferrring data from and to list")
         var count: U32 = 0
         while count < size do
+            list
             env.out.print(count.string())
             count  = count + 1
         end
 
-    fun ref getSpeed(): ( F64 val) =>ado
+    fun ref getSpeed(): ( F64 val) =>
         env.out.print("Sending time")
         duration
 
