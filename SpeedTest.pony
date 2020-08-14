@@ -1,5 +1,6 @@
 use "collections"
 use "random"
+use "time"
 actor TransferActor
 
     var size: U32 = 1
@@ -8,7 +9,6 @@ actor TransferActor
     var rand: Rand
     var dice: Dice
     var duration: F64
-    var timers: Timers
 
     new create(size': U32, env': Env) =>
         env = env'
@@ -30,30 +30,33 @@ actor TransferActor
         env.out.print("Done writing data")
 
 
-    be transferList(listInput: List[U64] iso)  =>
+    be transferList(listInput: List[U64] val)  =>
         env.out.print("Transferrring data from and to list")
         var count: U32 = 0
-        while count < size do
-            list
-            env.out.print(count.string())
-            count  = count + 1
+        for y in listInput.values() do
+            env.out.print(y.string())
         end
 
     fun ref getSpeed(): ( F64 val) =>
         env.out.print("Sending time")
         duration
 
+    fun getList(): (List[U64]) =>
+        env.out.print("Sending list")
+        list
+
 
 
 
 actor Main
-    var size: U32 = 80000000
+    var size: U32 = 8000000
     new create(env: Env) =>
         speedtest(env)
 
 
     fun speedtest(env: Env) =>
         var sizeMb = size/8000000
+        var timers = Timers
         env.out.write("Size of the list is set to: ")
         env.out.write(sizeMb.string())
         env.out.write("mb")
@@ -65,11 +68,15 @@ actor Main
         transferActor2.writeList()
         transferActor3.writeList()
         env.out.print("Done writing lists. Duration: ")
-        
+
+        var list1 = transferActor1.getList()
+        var list2 = transferActor2.getList()
+        var list3 = transferActor3.getList()
+
         env.out.print("Starting to transfer lists")
-        //transferActor1.transferList(env, list2)
-        //transferActor2.transferList(env, list3)
-        //transferActor3.transferList(env, list1)
+        transferActor1.transferList(list2)
+        transferActor2.transferList(list3)
+        transferActor3.transferList(list1)
 
         env.out.print("Done transferring lists. Duration: ")
 
