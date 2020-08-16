@@ -39,6 +39,7 @@ actor TransferActor
             list.push(count) //TODO: replace this
         end
 
+        env.out.print("Done writing data")
 
     fun ref getList(): (List[U64] val) =>
         env.out.print("Sending list")
@@ -64,7 +65,6 @@ actor Main
         var transferActor2 = TransferActor(size, env)
         var transferActor3 = TransferActor(size, env)
 
-        var timer = Timer()
 
         transferActor1.writeList()
         transferActor2.writeList()
@@ -77,34 +77,13 @@ actor Main
 
         env.out.print("Starting to transfer lists")
 
-        var timeBefore = Time.nanoseconds()
+        var timeBefore = Time.nanos()
 
         transferActor1.transferList(list2)
         transferActor2.transferList(list3)
         transferActor3.transferList(list1)
 
-        var timeAfter = Time.nanoseconds()
+        var timeAfter = Time.nanos()
+
         env.out.print("Done transferring lists. Duration: ")
-        timeAfter-timeBefore
-
-
-
-    class SpeedTestTimer is TimerNorify
-        var _env: Env
-          var _count: U64 = 0
-
-          new iso create(env: Env) =>
-            _env = env
-
-          fun ref apply(timer: Timer, count: U64): Bool =>
-            _count = _count + count
-            _env.out.print("timer: " + _count.string())
-            _count < 10
-
-          fun ref cancel(timer: Timer) =>
-            _env.out.print("timer cancelled")
-
-
-
-
-
+        (timeAfter - timeBefore)
